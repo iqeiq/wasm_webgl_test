@@ -2,8 +2,9 @@ CC=emcc
 SOURCES:=$(wildcard src/*.cpp)
 LDFLAGS=-O2 --llvm-opts 2
 NAME=native
-OUTPUT=public/$(NAME).html
-OUTPUT2=public/$(NAME).wsam
+FOLDER=docs
+OUTPUT=docs/$(NAME).html
+OUTPUT2=docs/$(NAME).wsam
 DIST:=$(wildcard public/$(NAME).*)
 
 all: $(SOURCES) $(OUTPUT)

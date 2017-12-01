@@ -19,9 +19,8 @@ public:
   App() :lifegame(1024) {
     const int tmp = 1024 - 2;
     for(int i = 0; i < tmp; ++i) {
-      //lifegame.born(rand() % tmp + 1, rand() % tmp + 1);
       lifegame.born(i + 1, 512);
-      //lifegame.born(i + 1, i + 2);
+      lifegame.born(512, i + 1);
     }
   }
   int initGL(const int width, const int height);
@@ -57,20 +56,20 @@ int App::initGL(const int width, const int height) {
 	}
 	
 	//SDL initialised successfully, now load shaders and geometry
-	const char vs_src[] =
-		"attribute vec4 vPos; \n"
-		"void main() {\n"
-		"   gl_Position = vPos; \n"
-		"}\n";
+	const char vs_src[] = R"(
+		attribute vec4 vPos;
+		void main() {
+		   gl_Position = vPos;
+    })";
 
-	const char fs_src[] =
-		"precision mediump float; \n"
-    "uniform sampler2D tex;\n"
-    "void main() {  \n"
-    "  vec4 color = texture2D(tex, gl_FragCoord.xy / 640.0); \n"
-    "  color.a = 1.0;"
-		"  gl_FragColor = vec4(color); \n"
-		"}\n";
+	const char fs_src[] = R"(
+		precision mediump float;
+    uniform sampler2D tex;
+    void main() {
+      vec4 color = texture2D(tex, gl_FragCoord.xy / 512.0);
+      color.a = 1.0;
+		  gl_FragColor = vec4(color);
+		})";
 
 	//load vertex and fragment shaders
 	auto vs = compileShader(GL_VERTEX_SHADER, vs_src);
@@ -88,8 +87,8 @@ int App::initGL(const int width, const int height) {
   
   glBindTexture(GL_TEXTURE_2D, texid);
 
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, lifegame.N, lifegame.N, 0,
-    GL_RGBA, GL_UNSIGNED_BYTE, lifegame.buffer);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, lifegame.N, lifegame.N, 0,
+    GL_RGB, GL_UNSIGNED_BYTE, lifegame.buffer);
   
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -100,8 +99,8 @@ int App::initGL(const int width, const int height) {
 void App::draw() {
   glUseProgram(program);
 
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, lifegame.N, lifegame.N, 0,
-    GL_RGBA, GL_UNSIGNED_BYTE, lifegame.buffer);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, lifegame.N, lifegame.N, 0,
+    GL_RGB, GL_UNSIGNED_BYTE, lifegame.buffer);
   
   static GLfloat vert[] = {
     -1.0f, 1.0f, 0.0f,

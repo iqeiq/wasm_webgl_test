@@ -1,3 +1,4 @@
+#include <iostream>
 #include <SDL/SDL.h>
 
 #ifdef EMSCRIPTEN
@@ -8,13 +9,14 @@
 
 static App app;
 
+
 void one_iter() {
   app.updateFrame();
   SDL_GL_SwapBuffers();
 }
 
 int main(int argc, char ** argv) {
-  app.initGL(640, 640);
+  app.initGL(512, 512);
 
 #ifdef __EMSCRIPTEN__
   // void emscripten_set_main_loop(em_callback_func func, int fps, int simulate_infinite_loop);
